@@ -18,36 +18,44 @@ async function bootstrap() {
 
   app.useGlobalInterceptors(new TransformInterceptor());
 
-  const configServer = app.get(ConfigService);
+  const configService = app.get(ConfigService);
 
   process.on('SIGINT', async () => {
     try {
       await app.close();
-      logger.log('App closed and process will exit in 5 seconds');
+      logger.log(
+        `App closed and process will exit in ${configService.get(
+          'GRACEFUL_SHUTDOWN_TIMEOUT',
+        )} ms`,
+      );
     } catch (err) {
       logger.error('Error during shutdown', err);
     } finally {
       setTimeout(() => {
         process.exit();
-      }, 5000);
+      }, configService.get('GRACEFUL_SHUTDOWN_TIMEOUT'));
     }
   });
 
   process.on('SIGTERM', async () => {
     try {
       await app.close();
-      logger.log('App closed and process will exit in 5 seconds');
+      logger.log(
+        `App closed and process will exit in ${configService.get(
+          'GRACEFUL_SHUTDOWN_TIMEOUT',
+        )} ms`,
+      );
     } catch (err) {
       logger.error('Error during shutdown', err);
     } finally {
       setTimeout(() => {
         process.exit();
-      }, 5000);
+      }, configService.get('GRACEFUL_SHUTDOWN_TIMEOUT'));
     }
   });
 
-  await app.listen(configServer.get('PORT'), () => {
-    logger.log(`Server is running on port ${configServer.get('PORT')}`);
+  await app.listen(configService.get('PORT'), () => {
+    logger.log(`Server is running on port ${configService.get('PORT')}`);
   });
 }
 bootstrap();
