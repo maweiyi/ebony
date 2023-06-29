@@ -16,6 +16,10 @@ services:
       - DB_NAME=test
       - REDIS_HOST=ebony-redis
       - REDIS_PORT=6379
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+
   ebony-mysql:
     image: alpine/socat
     command: TCP-LISTEN:3306,fork,reuseaddr TCP:host.docker.internal:3306

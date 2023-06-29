@@ -1,0 +1,18 @@
+version: '3'
+services:
+  ebony-app:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    ports:
+      - '3000:3000'
+    networks:
+      - ebony-network
+    environment:
+      - DB_HOST= ''
+      - DB_PORT=3306
+      - DB_USER= ''
+      - DB_PASS= ''
+      - DB_NAME= ''
+      - REDIS_HOST= ''
+      - REDIS_PORT= ''
