@@ -1,0 +1,31 @@
+version: '3'
+services:
+  ebony-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    networks:
+      - ebony-network
+    environment:
+      - DB_HOST=ebony-mysql
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASS=12345678
+      - DB_NAME=test
+      - REDIS_HOST=ebony-redis
+      - REDIS_PORT=6379
+  ebony-mysql:
+    image: alpine/socat
+    command: TCP-LISTEN:3306,fork,reuseaddr TCP:host.docker.internal:3306
+    networks:
+      - ebony-network
+  ebony-redis:
+    image: alpine/socat
+    command: TCP-LISTEN:6379,fork,reuseaddr TCP:host.docker.internal:6379
+    networks:
+      - ebony-network
+
+networks:
+  ebony-network:
