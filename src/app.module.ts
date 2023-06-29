@@ -8,9 +8,11 @@ import { AppService } from './app.service';
 import { AllExceptionsFilter } from './common/filters/exceptions/all.exceptions.filter';
 import { HttpExceptionFilter } from './common/filters/exceptions/http.exceptions.filter';
 import { RedisModule } from './common/shared/redis/redis.module';
+import { HealthcheckModule } from './module/healthcheck/healthcheck.module';
 
 @Module({
   imports: [
+    HealthcheckModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: ['.env', `.env.${process.env.NODE_ENV}`],
@@ -42,7 +44,7 @@ import { RedisModule } from './common/shared/redis/redis.module';
   providers: [
     AppService,
     {
-      provide: 'APP_FILTER',
+      provide: APP_FILTER,
       useClass: AllExceptionsFilter,
     },
     {
